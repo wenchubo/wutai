@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>五四青年剧 · 舞台走位工作台</title>
+
+<style>
+:root{
+  --bg:#10141c;
+  --panel:rgba(29,36,49,.84);
+  --panel2:rgba(37,45,60,.72);
+  --line:rgba(255,255,255,.10);
+  --text:#edf2fa;
+  --muted:#9ca9bd;
+  --blue:#91baff;
+  --gold:#e6c68b;
+  --green:#a8dfc1;
+  --radius:18px;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(ellipse at 48% -15%,#34445b 0%,transparent 46%),
+    radial-gradient(ellipse at 100% 100%,#202b3a 0%,transparent 48%),
+    var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+  "PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:14px;
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer;color:inherit}
+
+button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:2px solid var(--blue);
+  outline-offset:2px;
+}
+
+.topbar{
+  min-height:76px;
+  padding:16px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  border-bottom:1px solid var(--line);
+  background:rgba(14,18,26,.55);
+  backdrop-filter:blur(24px);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.brand-icon{
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(230,198,139,.35);
+  border-radius:14px;
+  background:linear-gradient(145deg,#4c4c46,#222c3a);
+  color:var(--gold);
+  font-size:21px;
+}
+
+.brand h1{
+  font-size:17px;
+  letter-spacing:.5px;
+  margin:0 0 5px;
+  font-weight:650;
+}
+
+.brand p{
+  color:var(--muted);
+  margin:0;
+  font-size:12px;
+}
+
+.top-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.btn{
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:9px 13px;
+  background:rgba(255,255,255,.055);
+  transition:.2s;
+}
+
+.btn:hover{
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.22);
+}
+
+.btn.primary{
+  color:#101a29;
+  background:var(--blue);
+  border-color:transparent;
+  font-weight:650;
+}
+
+.btn.gold{
+  color:#201a10;
+  background:var(--gold);
+  border-color:transparent;
+  font-weight:650;
+}
+
+.btn.danger{
+  color:#ffb9b9;
+}
+
+.app{
+  display:grid;
+  grid-template-columns:250px minmax(0,1fr) 285px;
+  gap:14px;
+  padding:15px;
+  max-width:1900px;
+  margin:auto;
+  min-height:calc(100vh - 76px);
+}
+
+.panel{
+  min-width:0;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:0 18px 55px rgba(0,0,0,.12);
+  backdrop-filter:blur(20px);
+  overflow:hidden;
+}
+
+.panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:16px;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-header h2{
+  margin:0;
+  font-size:14px;
+  font-weight:650;
+}
+
+.panel-body{padding:14px}
+
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.section-label{
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:1.4px;
+  margin:20px 0 10px;
+  text-transform:uppercase;
+}
+
+.input{
+  width:100%;
+  min-width:0;
+  color:var(--text);
+  background:rgba(8,12,19,.45);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px;
+}
+
+select option{
+  background:#202938;
+  color:white;
+}
+
+.row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.row>*{min-width:0}
+
+.stack{
+  display:grid;
+  gap:9px;
+}
+
+.scene-list,.roster-list{
+  display:grid;
+  gap:8px;
+}
+
+.scene-item{
+  padding:12px;
+  border-radius:12px;
+  border:1px solid transparent;
+  background:rgba(255,255,255,.035);
+  cursor:pointer;
+  transition:.2s;
+}
+
+.scene-item:hover{background:rgba(255,255,255,.07)}
+
+.scene-item.active{
+  background:rgba(145,186,255,.11);
+  border-color:rgba(145,186,255,.42);
+}
+
+.scene-item strong{
+  display:block;
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.scene-item span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.actor-card{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:9px;
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+}
+
+.actor-swatch{
+  width:12px;
+  height:26px;
+  border-radius:5px;
+  flex:none;
+}
+
+.actor-info{
+  min-width:0;
+  flex:1;
+}
+
+.actor-info strong{
+  display:block;
+  font-size:12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.actor-info span{
+  color:var(--muted);
+  display:block;
+  font-size:11px;
+  margin-top:3px;
+}
+
+.actor-card .btn{
+  padding:6px 8px;
+  font-size:11px;
+}
+
+.workspace{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:12px 14px;
+}
+
+.toolbar-group{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.mode-btn.active{
+  background:rgba(145,186,255,.17);
+  border-color:rgba(145,186,255,.55);
+  color:#dce9ff;
+}
+
+.stage-shell{
+  position:relative;
+  flex:1;
+  min-height:570px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:20px;
+  background:#111722;
+  box-shadow:0 24px 70px rgba(0,0,0,.27);
+}
+
+.stage-shell::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(255,220,160,.11),transparent 40%),
+    radial-gradient(ellipse at 50% 55%,rgba(90,120,160,.08),transparent 65%);
+}
+
+.stage-topline{
+  position:absolute;
+  z-index:20;
+  top:15px;
+  left:17px;
+  right:17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  pointer-events:none;
+}
+
+.stage-title{
+  font-size:11px;
+  letter-spacing:2px;
+  color:#c6d0df;
+}
+
+.stage-status{
+  font-size:11px;
+  color:#aebbd0;
+  padding:6px 9px;
+  border-radius:20px;
+  background:rgba(5,8,14,.48);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.stage{
+  position:absolute;
+  inset:48px 20px 22px;
+  perspective:1100px;
+  overflow:hidden;
+}
+
+.stage-world{
+  position:absolute;
+  inset:0;
+  transform-style:preserve-3d;
+  transition:transform .35s;
+}
+
+.stage-world.view3d{
+  transform:rotateX(23deg) scale(.91);
+  transform-origin:50% 55%;
+}
+
+.stage-floor{
+  position:absolute;
+  inset:4% 4% 7%;
+  border:1px solid rgba(222,195,145,.25);
+  border-radius:5px;
+  background:
+    linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.035) 50%,transparent 50.2%),
+    repeating-linear-gradient(0deg,transparent 0,transparent 59px,rgba(255,255,255,.035) 60px),
+    repeating-linear-gradient(90deg,transparent 0,transparent 59px,rgba(255,255,255,.035) 60px),
+    linear-gradient(145deg,#29303a,#202732 55%,#252c37);
+  box-shadow:
+    inset 0 0 90px rgba(0,0,0,.23),
+    0 0 60px rgba(0,0,0,.12);
+}
+
+.stage-floor::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(255,220,170,.09),transparent 52%),
+    linear-gradient(180deg,rgba(255,255,255,.025),transparent 35%);
+}
+
+.backstage{
+  position:absolute;
+  top:4%;
+  left:4%;
+  right:4%;
+  height:15%;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding-top:10px;
+  color:rgba(225,231,241,.55);
+  font-size:10px;
+  letter-spacing:3px;
+  border-bottom:1px solid rgba(230,198,139,.22);
+  background:linear-gradient(180deg,rgba(230,198,139,.035),transparent);
+}
+
+.wing{
+  position:absolute;
+  top:19%;
+  bottom:9%;
+  width:12%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  writing-mode:vertical-rl;
+  letter-spacing:3px;
+  font-size:11px;
+  color:rgba(230,198,139,.82);
+  border:1px solid rgba(230,198,139,.20);
+  background:linear-gradient(180deg,rgba(230,198,139,.055),rgba(0,0,0,.08));
+}
+
+.wing.left{left:4%}
+.wing.right{right:4%}
+
+.wing small{
+  font-size:9px;
+  color:rgba(230,198,139,.55);
+  margin-top:8px;
+}
+
+.entrance-marker{
+  position:absolute;
+  bottom:9%;
+  width:12%;
+  height:6%;
+  display:grid;
+  place-items:center;
+  color:#c2cedf;
+  font-size:10px;
+  letter-spacing:1px;
+  background:rgba(4,8,14,.65);
+  border-top:1px solid rgba(230,198,139,.4);
+}
+
+.entrance-marker.left{left:4%}
+.entrance-marker.right{right:4%}
+
+.stage-front{
+  position:absolute;
+  bottom:0;
+  left:16%;
+  right:16%;
+  height:7%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-top:2px solid rgba(230,198,139,.62);
+  color:rgba(230,198,139,.8);
+  font-size:10px;
+  letter-spacing:4px;
+  background:linear-gradient(180deg,rgba(230,198,139,.05),transparent);
+}
+
+.stage-hint{
+  position:absolute;
+  bottom:9px;
+  left:50%;
+  transform:translateX(-50%);
+  color:rgba(220,228,239,.38);
+  font-size:10px;
+  white-space:nowrap;
+}
+
+.actors-layer{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  transform-style:preserve-3d;
+}
+
+.actor{
+  position:absolute;
+  width:72px;
+  height:85px;
+  transform:translate(-50%,-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  cursor:grab;
+  user-select:none;
+  touch-action:none;
+  z-index:3;
+}
+
+.actor:active{cursor:grabbing}
+
+.actor.selected{z-index:10}
+
+.actor.selected .actor-person{
+  filter:drop-shadow(0 0 10px rgba(145,186,255,.72));
+}
+
+.actor-person{
+  position:relative;
+  width:32px;
+  height:44px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:filter .2s;
+}
+
+.actor-head{
+  width:15px;
+  height:15px;
+  border-radius:50%;
+  background:var(--actor-color);
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow:0 0 12px color-mix(in srgb,var(--actor-color) 35%,transparent);
+}
+
+.actor-body{
+  width:24px;
+  height:23px;
+  margin-top:2px;
+  border-radius:9px 9px 5px 5px;
+  background:linear-gradient(135deg,var(--actor-color),color-mix(in srgb,var(--actor-color) 55%,#202734));
+  border:1px solid rgba(255,255,255,.36);
+}
+
+.actor-legs{
+  display:flex;
+  gap:5px;
+  margin-top:1px;
+}
+
+.actor-legs i{
+  display:block;
+  width:7px;
+  height:11px;
+  border-radius:3px;
+  background:var(--actor-color);
+}
+
+.actor-tag{
+  margin-top:4px;
+  max-width:105px;
+  padding:4px 7px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:7px;
+  color:#f0f3f8;
+  background:rgba(13,18,27,.90);
+  box-shadow:0 5px 12px rgba(0,0,0,.17);
+  font-size:10px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.actor.selected .actor-tag{
+  border-color:var(--blue);
+  background:rgba(48,72,105,.95);
+}
+
+.actor-route{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+  z-index:2;
+}
+
+.route-line{
+  fill:none;
+  stroke:var(--actor-color);
+  stroke-width:2.3;
+  stroke-dasharray:6 5;
+  opacity:.9;
+}
+
+.route-point{
+  fill:var(--actor-color);
+  stroke:white;
+  stroke-width:1.5;
+}
+
+.empty-stage{
+  position:absolute;
+  z-index:8;
+  top:45%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  color:rgba(231,238,248,.68);
+  width:min(290px,80%);
+  pointer-events:none;
+}
+
+.empty-stage .symbol{
+  font-size:34px;
+  margin-bottom:10px;
+  color:rgba(230,198,139,.7);
+}
+
+.empty-stage strong{
+  display:block;
+  font-size:13px;
+  font-weight:550;
+}
+
+.empty-stage p{
+  color:rgba(200,211,226,.48);
+  font-size:11px;
+  line-height:1.8;
+}
+
+.field-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:6px;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.field input{width:100%}
+
+.divider{
+  height:1px;
+  background:var(--line);
+  margin:15px 0;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 8px;
+  border-radius:8px;
+  background:rgba(255,255,255,.06);
+  color:#c8d4e5;
+  font-size:11px;
+}
+
+.badge-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--green);
+}
+
+.timeline{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.timeline input{flex:1;min-width:0}
+
+.toast{
+  position:fixed;
+  z-index:100;
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,20px);
+  padding:11px 16px;
+  background:rgba(32,42,57,.96);
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:0 10px 35px rgba(0,0,0,.3);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.file-input{display:none}
+
+@media(max-width:1250px){
+  .app{grid-template-columns:220px minmax(0,1fr)}
+  .right-panel{grid-column:1/-1}
+  .right-panel .panel-body{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px;
+  }
+  .right-panel .panel-header{grid-column:1/-1}
+}
+
+@media(max-width:760px){
+  .topbar{padding:13px;align-items:flex-start}
+  .brand p{display:none}
+  .top-actions .btn{padding:8px;font-size:11px}
+  .app{display:flex;flex-direction:column;padding:9px}
+  .stage-shell{min-height:480px}
+  .stage{inset:45px 5px 12px}
+  .stage-floor{inset:4% 1% 7%}
+  .wing.left{left:1%}
+  .wing.right{right:1%}
+  .entrance-marker.left{left:1%}
+  .entrance-marker.right{right:1%}
+  .backstage{left:1%;right:1%}
+  .toolbar{align-items:flex-start}
+  .right-panel .panel-body{display:block}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">✦</div>
+    <div>
+      <h1>五四青年剧 · 舞台走位工作台</h1>
+      <p>STAGE BLOCKING STUDIO · 排演调度系统</p>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="btn" id="exportBtn">导出项目</button>
+    <button class="btn" id="importBtn">导入项目</button>
+    <button class="btn primary" id="saveBtn">保存编排</button>
+    <input class="file-input" type="file" id="importFile" accept=".json">
+  </div>
+</header>
+
+<main class="app">
+
+  <!-- 左侧：场景与演员名册 -->
+  <aside class="panel">
+    <div class="panel-header">
+      <h2>排演管理</h2>
+      <span class="badge"><span class="badge-dot"></span>本地保存</span>
+    </div>
+
+    <div class="panel-body">
+      <div class="section-label">场景 / SCENES</div>
+
+      <div class="scene-list" id="sceneList"></div>
+
+      <div class="row" style="margin-top:10px">
+        <button class="btn primary" id="addSceneBtn" style="flex:1">＋ 添加场景</button>
+      </div>
+
+      <div class="section-label">演员名册 / CAST</div>
+
+      <div class="muted small" style="line-height:1.8;margin-bottom:10px">
+        演员名册与舞台阵容分开管理。每一场只添加需要出场的角色。
+      </div>
+
+      <div class="stack">
+        <input class="input" id="newActorName" placeholder="演员姓名 / 角色名称">
+        <input class="input" id="newActorRole" placeholder="角色说明（可选）">
+        <button class="btn" id="createActorBtn">＋ 创建演员</button>
+      </div>
+
+      <div class="section-label">全部演员</div>
+      <div class="roster-list" id="rosterList"></div>
+    </div>
+  </aside>
+
+  <!-- 中间：舞台 -->
+  <section class="workspace">
+    <div class="panel toolbar">
+      <div class="toolbar-group">
+        <button class="btn mode-btn active" id="flatBtn">平面视图</button>
+        <button class="btn mode-btn" id="threeDBtn">3D 视图</button>
+        <button class="btn" id="routeBtn">路线编辑</button>
+      </div>
+
+      <div class="toolbar-group">
+        <button class="btn" id="paradeBtn">▦ 游行方阵</button>
+        <button class="btn" id="clearRoutesBtn">清除路线</button>
+        <button class="btn gold" id="playBtn">▶ 演绎走位</button>
+      </div>
+    </div>
+
+    <div class="stage-shell">
+      <div class="stage-topline">
+        <span class="stage-title">MAIN STAGE / 主舞台</span>
+        <span class="stage-status" id="stageStatus">平面视图 · 可拖动</span>
+      </div>
+
+      <div class="stage">
+        <div class="stage-world" id="stageWorld">
+          <div class="stage-floor">
+            <div class="backstage">后区 · BACKSTAGE</div>
+            <div class="wing left">上场口 <small>ENTRANCE</small></div>
+            <div class="wing right">下场口 <small>EXIT</small></div>
+            <div class="entrance-marker left">上场口</div>
+            <div class="entrance-marker right">下场口</div>
+            <div class="stage-front">台口 · DOWNSTAGE</div>
+          </div>
+
+          <svg class="actor-route" id="routeSvg" viewBox="0 0 1000 600" preserveAspectRatio="none"></svg>
+          <div class="actors-layer" id="actorsLayer"></div>
+        </div>
+      </div>
+
+      <div class="stage-hint">拖动演员调整站位 · 选中演员后可编辑移动路线</div>
+    </div>
+
+    <div class="panel toolbar">
+      <div>
+        <strong id="currentSceneName">第一场</strong>
+        <span class="muted small" id="stageActorCount" style="margin-left:10px">0 位演员在场</span>
+      </div>
+
+      <div class="toolbar-group">
+        <button class="btn" id="undoBtn">重置当前场站位</button>
+        <span class="muted small" id="saveStatus">所有修改自动保存</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 右侧：当前场景演员与属性 -->
+  <aside class="panel right-panel">
+    <div class="panel-header">
+      <h2>场景控制台</h2>
+      <span class="badge" id="selectedBadge">未选中演员</span>
+    </div>
+
+    <div class="panel-body" style="display:block">
+      <div>
+        <div class="section-label" style="margin-top:0">当前场景阵容</div>
+        <div class="muted small" style="line-height:1.8;margin-bottom:10px">
+          从左侧名册逐个加入。未加入的演员不会出现在当前舞台。
+        </div>
+        <div class="roster-list" id="stageCastList"></div>
+      </div>
+
+      <div>
+        <div class="section-label">演员属性</div>
+        <div class="muted small" id="selectionHint" style="line-height:1.8">
+          选中舞台上的演员后，可以调整站位或编辑路线。
+        </div>
+
+        <div id="actorProperties" style="display:none">
+          <div class="field-grid">
+            <div class="field">
+              <label>横向位置 X</label>
+              <input class="input" id="actorX" type="number" min="0" max="100" step="1">
+            </div>
+            <div class="field">
+              <label>纵向位置 Y</label>
+              <input class="input" id="actorY" type="number" min="0" max="100" step="1">
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:10px">
+            <label>名牌文字</label>
+            <input class="input" id="actorLabel">
+          </div>
+
+          <div class="field" style="margin-top:10px">
+            <label>演员颜色</label>
+            <input class="input" id="actorColor" type="color" style="height:40px">
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="section-label">移动路线</div>
+          <div class="muted small" style="line-height:1.8">
+            开启路线编辑后，点击舞台添加路线点。再次点击路线编辑可退出。
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <button class="btn" id="addRoutePointBtn" style="flex:1">＋ 添加当前位置</button>
+            <button class="btn danger" id="clearActorRouteBtn">清除</button>
+          </div>
+
+          <div class="field" style="margin-top:12px">
+            <label>移动时长（秒）</label>
+            <input class="input" id="moveDuration" type="number" min="1" max="60" value="3">
+          </div>
+
+          <button class="btn" id="removeActorBtn" style="width:100%;margin-top:12px">
+            从当前场景移出
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">游行方阵</div>
+        <div class="field-grid">
+          <div class="field">
+            <label>行数</label>
+            <input class="input" id="paradeRows" type="number" min="1" max="20" value="4">
+          </div>
+          <div class="field">
+            <label>每行人数</label>
+            <input class="input" id="paradeCols" type="number" min="1" max="20" value="5">
+          </div>
+          <div class="field">
+            <label>横向间距</label>
+            <input class="input" id="paradeGapX" type="number" min="3" max="20" value="8">
+          </div>
+          <div class="field">
+            <label>纵向间距</label>
+            <input class="input" id="paradeGapY" type="number" min="3" max="20" value="9">
+          </div>
+        </div>
+
+        <button class="btn" id="generateParadeBtn" style="width:100%;margin-top:10px">
+          生成游行方阵
+        </button>
+        <p class="muted small" style="line-height:1.7">
+          仅排列当前场景中已加入的演员。生成后仍可逐个拖动调整。
+        </p>
+      </div>
+    </div>
+  </aside>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const STORAGE_KEY = "mayFourthStageStudio_v1";
+
+const COLORS = [
+  "#e5b96f","#7db8ff","#e88c9d","#9bd8b2",
+  "#b7a2ff","#f29b69","#73d4cf","#d6a5d8",
+  "#c9d3e3","#e0d27c","#86a9ed","#e7a6a6",
+  "#b1d38b","#c5a5ff","#f2c48f","#87c6d5",
+  "#d0a58a","#9db5d9","#b5d9b4","#edb6d5"
+];
+
+const $ = id => document.getElementById(id);
+
+function uid(){
+  return "id_" + Math.random().toString(36).slice(2,10);
+}
+
+function clamp(value,min,max){
+  return Math.max(min,Math.min(max,value));
+}
+
+function createDefaultData(){
+  return {
+    version:1,
+    actors:[],
+    scenes:[
+      {
+        id:"scene_1",
+        name:"第一场 · 北大红楼",
+        cast:[],
+        initialPositions:{}
+      }
+    ],
+    activeSceneId:"scene_1"
+  };
+}
+
+let data = createDefaultData();
+let selectedActorId = null;
+let routeEditing = false;
+let isPlaying = false;
+let playbackToken = 0;
+let dragState = null;
+let toastTimer = null;
+
+function currentScene(){
+  return data.scenes.find(s=>s.id===data.activeSceneId) || data.scenes[0];
+}
+
+function getActor(id){
+  return data.actors.find(a=>a.id===id);
+}
+
+function isInCurrentScene(id){
+  return currentScene().cast.some(a=>a.actorId===id);
+}
+
+function castMember(actorId){
+  return currentScene().cast.find(a=>a.actorId===actorId);
+}
+
+function saveData(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+    $("saveStatus").textContent="已自动保存";
+  }catch(e){
+    $("saveStatus").textContent="保存失败";
+    console.error(e);
+  }
+}
+
+function toast(message){
+  const el=$("toast");
+  el.textContent=message;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("show"),2200);
+}
+
+function makeActor(name,role=""){
+  const actor={
+    id:uid(),
+    name:name.trim(),
+    role:role.trim(),
+    color:COLORS[data.actors.length%COLORS.length]
+  };
+  data.actors.push(actor);
+  return actor;
+}
+
+function addActorToScene(actorId){
+  const scene=currentScene();
+  if(scene.cast.some(a=>a.actorId===actorId)){
+    toast("这位演员已经在当前场景中");
+    return;
+  }
+
+  const index=scene.cast.length;
+  scene.cast.push({
+    actorId,
+    x:clamp(25+(index%5)*12,10,90),
+    y:clamp(30+Math.floor(index/5)*12,15,85),
+    route:[],
+    duration:3
+  });
+
+  if(!scene.initialPositions[actorId]){
+    scene.initialPositions[actorId]={
+      x:scene.cast[index].x,
+      y:scene.cast[index].y
+    };
+  }
+
+  selectedActorId=actorId;
+  saveData();
+  renderAll();
+  toast("已将演员加入当前场景");
+}
+
+function removeActorFromScene(actorId){
+  const scene=currentScene();
+  scene.cast=scene.cast.filter(a=>a.actorId!==actorId);
+
+  if(selectedActorId===actorId)selectedActorId=null;
+
+  saveData();
+  renderAll();
+  toast("演员已从当前场景移出");
+}
+
+function renderScenes(){
+  const root=$("sceneList");
+  root.innerHTML="";
+
+  data.scenes.forEach((scene,index)=>{
+    const el=document.createElement("div");
+    el.className="scene-item"+(scene.id===data.activeSceneId?" active":"");
+
+    const title=document.createElement("strong");
+    title.textContent=scene.name;
+
+    const info=document.createElement("span");
+    info.textContent=`第 ${index+1} 场 · ${scene.cast.length} 位演员`;
+
+    el.append(title,info);
+    el.addEventListener("click",()=>{
+      data.activeSceneId=scene.id;
+      selectedActorId=null;
+      routeEditing=false;
+      saveData();
+      renderAll();
+    });
+
+    root.appendChild(el);
+  });
+}
+
+function renderRoster(){
+  const root=$("rosterList");
+  root.innerHTML="";
+
+  if(!data.actors.length){
+    const msg=document.createElement("div");
+    msg.className="muted small";
+    msg.style.lineHeight="1.8";
+    msg.textContent="演员名册还是空的。你可以在上方逐个创建演员，也可以导入项目数据。";
+    root.appendChild(msg);
+    return;
+  }
+
+  data.actors.forEach(actor=>{
+    const added=isInCurrentScene(actor.id);
+    const card=document.createElement("div");
+    card.className="actor-card";
+
+    const swatch=document.createElement("div");
+    swatch.className="actor-swatch";
+    swatch.style.background=actor.color;
+
+    const info=document.createElement("div");
+    info.className="actor-info";
+
+    const name=document.createElement("strong");
+    name.textContent=actor.name;
+
+    const role=document.createElement("span");
+    role.textContent=actor.role||"未填写角色说明";
+
+    info.append(name,role);
+
+    const button=document.createElement("button");
+    button.className="btn"+(added?" danger":"");
+    button.textContent=added?"已加入":"＋加入";
+
+    button.addEventListener("click",()=>{
+      if(added)removeActorFromScene(actor.id);
+      else addActorToScene(actor.id);
+    });
+
+    card.append(swatch,info,button);
+    root.appendChild(card);
+  });
+}
+
+function renderStageCast(){
+  const root=$("stageCastList");
+  root.innerHTML="";
+
+  const scene=currentScene();
+
+  if(!scene.cast.length){
+    const msg=document.createElement("div");
+    msg.className="muted small";
+    msg.style.lineHeight="1.8";
+    msg.textContent="当前场景还没有演员。请从左侧名册点击「＋加入」。";
+    root.appendChild(msg);
+  }
+
+  scene.cast.forEach(member=>{
+    const actor=getActor(member.actorId);
+    if(!actor)return;
+
+    const card=document.createElement("div");
+    card.className="actor-card";
+
+    const swatch=document.createElement("div");
+    swatch.className="actor-swatch";
+    swatch.style.background=actor.color;
+
+    const info=document.createElement("div");
+    info.className="actor-info";
+
+    const name=document.createElement("strong");
+    name.textContent=actor.name;
+
+    const role=document.createElement("span");
+    role.textContent=actor.role||"当前场景演员";
+
+    info.append(name,role);
+
+    const button=document.createElement("button");
+    button.className="btn danger";
+    button.textContent="移出";
+    button.addEventListener("click",()=>removeActorFromScene(actor.id));
+
+    card.append(swatch,info,button);
+
+    card.addEventListener("click",e=>{
+      if(e.target===button)return;
+      selectedActorId=actor.id;
+      renderAll();
+    });
+
+    root.appendChild(card);
+  });
+}
+
+function createActorElement(actor,member){
+  const el=document.createElement("div");
+  el.className="actor"+(actor.id===selectedActorId?" selected":"");
+  el.dataset.actorId=actor.id;
+  el.style.left=member.x+"%";
+  el.style.top=member.y+"%";
+  el.style.setProperty("--actor-color",actor.color);
+
+  const person=document.createElement("div");
+  person.className="actor-person";
+
+  const head=document.createElement("div");
+  head.className="actor-head";
+
+  const body=document.createElement("div");
+  body.className="actor-body";
+
+  const legs=document.createElement("div");
+  legs.className="actor-legs";
+
+  const leg1=document.createElement("i");
+  const leg2=document.createElement("i");
+  legs.append(leg1,leg2);
+
+  person.append(head,body,legs);
+
+  const tag=document.createElement("div");
+  tag.className="actor-tag";
+  tag.textContent=actor.name;
+
+  el.append(person,tag);
+
+  el.addEventListener("pointerdown",e=>{
+    if(isPlaying)return;
+
+    e.stopPropagation();
+    selectedActorId=actor.id;
+
+    if(routeEditing){
+      addRoutePointAt(actor.id,member.x,member.y);
+      renderAll();
+      return;
+    }
+
+    dragState={
+      actorId:actor.id,
+      pointerId:e.pointerId,
+      startX:e.clientX,
+      startY:e.clientY,
+      originalX:member.x,
+      originalY:member.y,
+      moved:false
+    };
+
+    el.setPointerCapture(e.pointerId);
+    renderProperties();
+  });
+
+  el.addEventListener("pointermove",e=>{
+    if(!dragState||dragState.actorId!==actor.id)return;
+
+    const dx=e.clientX-dragState.startX;
+    const dy=e.clientY-dragState.startY;
+
+    if(Math.abs(dx)+Math.abs(dy)>2)dragState.moved=true;
+
+    const layer=$("actorsLayer");
+    const rect=layer.getBoundingClientRect();
+
+    const x=clamp(dragState.originalX+dx/rect.width*100,5,95);
+    const y=clamp(dragState.originalY+dy/rect.height*100,10,90);
+
+    member.x=x;
+    member.y=y;
+
+    el.style.left=x+"%";
+    el.style.top=y+"%";
+
+    renderRoutes();
+    updatePositionInputs();
+  });
+
+  el.addEventListener("pointerup",e=>{
+    if(!dragState||dragState.actorId!==actor.id)return;
+
+    const moved=dragState.moved;
+    dragState=null;
+
+    if(moved)saveData();
+
+    selectedActorId=actor.id;
+    renderAll();
+  });
+
+  el.addEventListener("pointercancel",()=>{
+    dragState=null;
+  });
+
+  return el;
+}
+
+function renderStage(){
+  const layer=$("actorsLayer");
+  layer.innerHTML="";
+
+  const scene=currentScene();
+
+  scene.cast.forEach(member=>{
+    const actor=getActor(member.actorId);
+    if(!actor)return;
+    layer.appendChild(createActorElement(actor,member));
+  });
+
+  $("stageActorCount").textContent=`${scene.cast.length} 位演员在场`;
+  $("currentSceneName").textContent=scene.name;
+
+  const empty=document.querySelector(".empty-stage");
+  if(empty)empty.remove();
+
+  if(!scene.cast.length){
+    const emptyEl=document.createElement("div");
+    emptyEl.className="empty-stage";
+    emptyEl.innerHTML=
+      '<div class="symbol">✦</div>'+
+      '<strong>等待演员入场</strong>'+
+      '<p>从左侧演员名册选择本场角色。<br>舞台上的每一个位置，都由你来决定。</p>';
+    layer.appendChild(emptyEl);
+  }
+
+  renderRoutes();
+}
+
+function renderRoutes(){
+  const svg=$("routeSvg");
+  svg.innerHTML="";
+
+  const scene=currentScene();
+
+  scene.cast.forEach(member=>{
+    if(!member.route||!member.route.length)return;
+
+    const actor=getActor(member.actorId);
+    if(!actor)return;
+
+    const points=[
+      {x:member.x,y:member.y},
+      ...member.route
+    ];
+
+    const poly=document.createElementNS("http://www.w3.org/2000/svg","polyline");
+    poly.setAttribute("points",points.map(p=>
+      `${p.x*10},${p.y*6}`
+    ).join(" "));
+    poly.setAttribute("class","route-line");
+    poly.style.setProperty("--actor-color",actor.color);
+    svg.appendChild(poly);
+
+    member.route.forEach(p=>{
+      const circle=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      circle.setAttribute("cx",p.x*10);
+      circle.setAttribute("cy",p.y*6);
+      circle.setAttribute("r",4);
+      circle.setAttribute("class","route-point");
+      circle.setAttribute("fill",actor.color);
+      svg.appendChild(circle);
+    });
+  });
+}
+
+function renderProperties(){
+  const actor=getActor(selectedActorId);
+  const member=castMember(selectedActorId);
+
+  $("selectedBadge").textContent=actor?actor.name:"未选中演员";
+  $("selectionHint").style.display=actor&&member?"none":"block";
+  $("actorProperties").style.display=actor&&member?"block":"none";
+
+  if(!actor||!member)return;
+
+  $("actorX").value=Number(member.x.toFixed(1));
+  $("actorY").value=Number(member.y.toFixed(1));
+  $("actorLabel").value=actor.name;
+  $("actorColor").value=actor.color;
+  $("moveDuration").value=member.duration||3;
+}
+
+function updatePositionInputs(){
+  const member=castMember(selectedActorId);
+  if(!member)return;
+  $("actorX").value=Number(member.x.toFixed(1));
+  $("actorY").value=Number(member.y.toFixed(1));
+}
+
+function renderAll(){
+  renderScenes();
+  renderRoster();
+  renderStageCast();
+  renderStage();
+  renderProperties();
+
+  $("routeBtn").classList.toggle("active",routeEditing);
+  $("stageStatus").textContent=
+    ( $("stageWorld").classList.contains("view3d")?"3D 视图":"平面视图")
+    +(routeEditing?" · 路线编辑":" · 可拖动");
+}
+
+function addRoutePointAt(actorId,x,y){
+  const member=castMember(actorId);
+  if(!member)return;
+
+  member.route=member.route||[];
+  member.route.push({
+    x:clamp(x,5,95),
+    y:clamp(y,10,90)
+  });
+
+  saveData();
+  renderRoutes();
+  toast("已添加路线点");
+}
+
+function generateParade(){
+  const scene=currentScene();
+  const cast=scene.cast;
+
+  if(!cast.length){
+    toast("请先添加演员，再生成方阵");
+    return;
+  }
+
+  const rows=clamp(parseInt($("paradeRows").value)||4,1,20);
+  const cols=clamp(parseInt($("paradeCols").value)||5,1,20);
+  const gapX=clamp(parseFloat($("paradeGapX").value)||8,3,20);
+  const gapY=clamp(parseFloat($("paradeGapY").value)||9,3,20);
+
+  const count=Math.min(cast.length,rows*cols);
+
+  const actualCols=Math.min(cols,count);
+  const actualRows=Math.ceil(count/actualCols);
+
+  const startX=50-(actualCols-1)*gapX/2;
+  const startY=40-(actualRows-1)*gapY/2;
+
+  cast.forEach((member,index)=>{
+    if(index>=count)return;
+
+    const row=Math.floor(index/actualCols);
+    const col=index%actualCols;
+
+    member.x=clamp(startX+col*gapX,8,92);
+    member.y=clamp(startY+row*gapY,18,83);
+  });
+
+  saveData();
+  renderAll();
+  toast(`已排列 ${count} 位演员`);
+}
+
+function sleep(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
+async function playRoutes(){
+  if(isPlaying){
+    playbackToken++;
+    isPlaying=false;
+    $("playBtn").textContent="▶ 演绎走位";
+    toast("已停止演绎");
+    return;
+  }
+
+  const scene=currentScene();
+  const movers=scene.cast.filter(m=>m.route&&m.route.length);
+
+  if(!movers.length){
+    toast("请先给至少一位演员设置路线");
+    return;
+  }
+
+  isPlaying=true;
+  const token=++playbackToken;
+  $("playBtn").textContent="■ 停止演绎";
+
+  const originals=new Map();
+  scene.cast.forEach(m=>{
+    originals.set(m.actorId,{x:m.x,y:m.y});
+  });
+
+  try{
+    const maxSteps=Math.max(...movers.map(m=>m.route.length));
+
+    for(let step=0;step<maxSteps;step++){
+      if(token!==playbackToken)break;
+
+      const promises=movers.map(member=>{
+        if(!member.route[step])return Promise.resolve();
+
+        const start={x:member.x,y:member.y};
+        const end=member.route[step];
+        const duration=clamp(Number(member.duration)||3,1,60)*1000;
+
+        return animateActor(member,start,end,duration,token);
+      });
+
+      await Promise.all(promises);
+    }
+  }finally{
+    isPlaying=false;
+    $("playBtn").textContent="▶ 演绎走位";
+
+    if(token===playbackToken){
+      saveData();
+      renderAll();
+      toast("走位演绎完成");
+    }
+  }
+}
+
+function animateActor(member,start,end,duration,token){
+  return new Promise(resolve=>{
+    const began=performance.now();
+
+    function frame(now){
+      if(token!==playbackToken){
+        resolve();
+        return;
+      }
+
+      const t=clamp((now-began)/duration,0,1);
+      const eased=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+      member.x=start.x+(end.x-start.x)*eased;
+      member.y=start.y+(end.y-start.y)*eased;
+
+      const el=$("actorsLayer").querySelector(
+        `[data-actor-id="${member.actorId}"]`
+      );
+
+      if(el){
+        el.style.left=member.x+"%";
+        el.style.top=member.y+"%";
+      }
+
+      renderRoutes();
+
+      if(t<1)requestAnimationFrame(frame);
+      else resolve();
+    }
+
+    requestAnimationFrame(frame);
+  });
+}
+
+function addScene(){
+  const n=data.scenes.length+1;
+  const name=prompt("请输入场景名称",`第${n}场 · 新场景`);
+
+  if(name===null)return;
+
+  const scene={
+    id:uid(),
+    name:name.trim()||`第${n}场`,
+    cast:[],
+    initialPositions:{}
+  };
+
+  data.scenes.push(scene);
+  data.activeSceneId=scene.id;
+  selectedActorId=null;
+  routeEditing=false;
+
+  saveData();
+  renderAll();
+  toast("新场景已创建，请逐个添加演员");
+}
+
+function exportProject(){
+  const blob=new Blob(
+    [JSON.stringify(data,null,2)],
+    {type:"application/json;charset=utf-8"}
+  );
+
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="五四青年剧_舞台走位项目.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+  toast("项目已导出");
+}
+
+function importProject(file){
+  if(!file)return;
+
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+    try{
+      const incoming=JSON.parse(reader.result);
+
+      if(!incoming||!Array.isArray(incoming.actors)||
+         !Array.isArray(incoming.scenes)){
+        throw new Error("文件格式不正确");
+      }
+
+      data=incoming;
+
+      if(!data.scenes.some(s=>s.id===data.activeSceneId)){
+        data.activeSceneId=data.scenes[0]?.id;
+      }
+
+      selectedActorId=null;
+      saveData();
+      renderAll();
+      toast("项目导入成功");
+    }catch(e){
+      alert("导入失败：请检查是否为本工作台导出的 JSON 文件。");
+    }
+
+    $("importFile").value="";
+  };
+
+  reader.readAsText(file);
+}
+
+/* 创建演员 */
+$("createActorBtn").addEventListener("click",()=>{
+  const name=$("newActorName").value.trim();
+  const role=$("newActorRole").value.trim();
+
+  if(!name){
+    toast("请先填写演员姓名或角色名称");
+    $("newActorName").focus();
+    return;
+  }
+
+  const actor=makeActor(name,role);
+
+  $("newActorName").value="";
+  $("newActorRole").value="";
+
+  saveData();
+  renderAll();
+  toast("演员已加入名册，可按场次添加");
+});
+
+/* 场景管理 */
+$("addSceneBtn").addEventListener("click",addScene);
+
+/* 视图切换 */
+$("flatBtn").addEventListener("click",()=>{
+  $("stageWorld").classList.remove("view3d");
+  $("flatBtn").classList.add("active");
+  $("threeDBtn").classList.remove("active");
+  renderAll();
+});
+
+$("threeDBtn").addEventListener("click",()=>{
+  $("stageWorld").classList.add("view3d");
+  $("threeDBtn").classList.add("active");
+  $("flatBtn").classList.remove("active");
+  renderAll();
+});
+
+/* 路线编辑 */
+$("routeBtn").addEventListener("click",()=>{
+  routeEditing=!routeEditing;
+  renderAll();
+
+  toast(routeEditing
+    ?"路线编辑已开启：点击舞台添加路线点"
+    :"已退出路线编辑");
+});
+
+$("addRoutePointBtn").addEventListener("click",()=>{
+  const member=castMember(selectedActorId);
+  if(!member){
+    toast("请先选中一位演员");
+    return;
+  }
+
+  addRoutePointAt(selectedActorId,member.x,member.y);
+  renderAll();
+});
+
+$("clearActorRouteBtn").addEventListener("click",()=>{
+  const member=castMember(selectedActorId);
+  if(!member)return;
+
+  member.route=[];
+  saveData();
+  renderAll();
+  toast("已清除该演员的路线");
+});
+
+$("clearRoutesBtn").addEventListener("click",()=>{
+  currentScene().cast.forEach(m=>m.route=[]);
+  saveData();
+  renderAll();
+  toast("当前场景的所有路线已清除");
+});
+
+/* 演员属性 */
+$("actorX").addEventListener("change",()=>{
+  const member=castMember(selectedActorId);
+  if(!member)return;
+
+  member.x=clamp(Number($("actorX").value)||0,5,95);
+  saveData();
+  renderStage();
+});
+
+$("actorY").addEventListener("change",()=>{
+  const member=castMember(selectedActorId);
+  if(!member)return;
+
+  member.y=clamp(Number($("actorY").value)||0,10,90);
+  saveData();
+  renderStage();
+});
+
+$("actorLabel").addEventListener("change",()=>{
+  const actor=getActor(selectedActorId);
+  if(!actor)return;
+
+  actor.name=$("actorLabel").value.trim()||actor.name;
+  saveData();
+  renderAll();
+});
+
+$("actorColor").addEventListener("input",()=>{
+  const actor=getActor(selectedActorId);
+  if(!actor)return;
+
+  actor.color=$("actorColor").value;
+  saveData();
+  renderStage();
+  renderProperties();
+});
+
+$("moveDuration").addEventListener("change",()=>{
+  const member=castMember(selectedActorId);
+  if(!member)return;
+
+  member.duration=clamp(Number($("moveDuration").value)||3,1,60);
+  saveData();
+});
+
+$("removeActorBtn").addEventListener("click",()=>{
+  if(selectedActorId)removeActorFromScene(selectedActorId);
+});
+
+/* 游行方阵 */
+$("paradeBtn").addEventListener("click",generateParade);
+$("generateParadeBtn").addEventListener("click",generateParade);
+
+/* 播放路线 */
+$("playBtn").addEventListener("click",playRoutes);
+
+/* 重置站位 */
+$("undoBtn").addEventListener("click",()=>{
+  const scene=currentScene();
+
+  scene.cast.forEach(member=>{
+    const p=scene.initialPositions[member.actorId];
+    if(p){
+      member.x=p.x;
+      member.y=p.y;
+    }
+    member.route=[];
+  });
+
+  saveData();
+  renderAll();
+  toast("已重置到初始站位");
+});
+
+/* 保存与导入导出 */
+$("saveBtn").addEventListener("click",()=>{
+  saveData();
+  toast("编排已保存到当前浏览器");
+});
+
+$("exportBtn").addEventListener("click",exportProject);
+$("importBtn").addEventListener("click",()=>$("importFile").click());
+$("importFile").addEventListener("change",e=>importProject(e.target.files[0]));
+
+/* 舞台点击：路线编辑 */
+$("stageWorld").addEventListener("click",e=>{
+  if(!routeEditing||isPlaying)return;
+
+  if(e.target.closest(".actor"))return;
+
+  const layer=$("actorsLayer");
+  const rect=layer.getBoundingClientRect();
+
+  const x=clamp((e.clientX-rect.left)/rect.width*100,5,95);
+  const y=clamp((e.clientY-rect.top)/rect.height*100,10,90);
+
+  if(!selectedActorId){
+    toast("请先选中要编辑路线的演员");
+    return;
+  }
+
+  addRoutePointAt(selectedActorId,x,y);
+  renderAll();
+});
+
+/* 本地数据恢复 */
+function loadData(){
+  try{
+    const saved=localStorage.getItem(STORAGE_KEY);
+
+    if(saved){
+      const parsed=JSON.parse(saved);
+
+      if(Array.isArray(parsed.actors)&&Array.isArray(parsed.scenes)){
+        data=parsed;
+      }
+    }
+  }catch(e){
+    console.warn("读取本地项目失败",e);
+  }
+
+  if(!data.scenes.length){
+    data=createDefaultData();
+  }
+
+  if(!data.scenes.some(s=>s.id===data.activeSceneId)){
+    data.activeSceneId=data.scenes[0].id;
+  }
+
+  /* 兼容早期场景中没有路线或初始位置的情况 */
+  data.scenes.forEach(scene=>{
+    scene.cast=scene.cast||[];
+    scene.initialPositions=scene.initialPositions||{};
+
+    scene.cast.forEach(member=>{
+      member.route=member.route||[];
+      member.duration=member.duration||3;
+    });
+  });
+}
+
+loadData();
+renderAll();
+</script>
+
+</body>
+</html>
